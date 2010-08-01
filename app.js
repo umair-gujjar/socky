@@ -2,7 +2,7 @@ var net = require('net');
 var socky = require('./lib/socky');
 
 var config = {
-	port: 1080,
+	port: 1121,
 	host: '127.0.0.1'
 };
 
