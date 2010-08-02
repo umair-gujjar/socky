@@ -1,5 +1,6 @@
 var utils = require('../lib/utils'),
-  assert = require('assert');
+  assert = require('assert'),
+  Buffer = require('buffer').Buffer;
 
 // isIPv4
 var IPv4 = ['127.0.0.1', '0.0.0.0', '255.255.255.255'];
@@ -29,13 +30,31 @@ delete buff;
 
 // packDomain
 var domains = {
-	'google.com': 'google.com',
-	'www.google.com': 'www.google.com',
+	'google.com': '\x0agoogle.com',
+	'www.google.com': '\x0ewww.google.com',
 };
+
 for (var addr in domains) {
-	buff = new Buffer(addr.length);
+	buff = new Buffer(addr.length+1, 'binary');
 	utils.packDomain(buff, 0, addr);
 	
-	assert.equal(domains[addr], buff.toString('ascii', 0, addr.length));
-	delete(buff);
+	assert.equal(domains[addr], buff.toString('binary', 0, buff.length));
+	delete buff;
 }
+
+// packPort
+var ports = {
+	80: '\x00\x50',
+	1121: '\x04\x61',
+	65535: '\xff\xff',
+};
+
+buff = new Buffer(2);
+for (var port in ports) {
+	utils.packPort(buff, 0, port);
+	
+	assert.equal(ports[port], buff.toString('binary', 0, buff.length));
+	assert.equal(port, utils.unpackPort(buff, 0));
+}
+
+delete buff;

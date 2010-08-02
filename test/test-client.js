@@ -1,18 +1,22 @@
-var socky = require('../lib/socky');
+var socky = require('../lib/socky'),
+  utils = require('../lib/utils'),
+  assert = require('assert');
 
-var factory = socky.createConnectionFactory(1111, 'localhost');
-var connection = factory.createConnection(80, 'google.com');
+var factory = socky.createConnectionFactory(1211, 'localhost');
+var connection = factory.createConnection(80, 'googl111e.com');
 
 connection.on('connect', function() {
-	console.log('client connect');
+	assert.equal(utils.STATE.OPEN, connection.readyState);
+	
+	// send a simple HTTP request
+	connection.write("GET /\r\n\r\n");
 });
 
 connection.on('data', function(data) {
-	console.log(data);
+	// just validate that we has data
+	assert.ok(/google\.com/.test(data));
 });
 
 connection.on('end', function() {
-	console.log('client end');
-	
 	connection.end();
 });
