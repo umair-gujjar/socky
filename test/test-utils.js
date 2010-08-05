@@ -42,10 +42,11 @@ for (var addr in domains) {
 	delete buff;
 }
 
-// packPort
+// packPort and unpackPort
 var ports = {
 	80: '\x00\x50',
 	1121: '\x04\x61',
+	8012: '\x1f\x4c',
 	65535: '\xff\xff',
 };
 

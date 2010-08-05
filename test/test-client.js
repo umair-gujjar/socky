@@ -2,8 +2,8 @@ var socky = require('../lib/socky'),
   utils = require('../lib/utils'),
   assert = require('assert');
 
-var factory = socky.createConnectionFactory(1211, 'localhost');
-var connection = factory.createConnection(80, 'googl111e.com');
+var factory = socky.createConnectionFactory(1121, 'localhost');
+var connection = factory.createConnection(80, 'google.com');
 
 connection.on('connect', function() {
 	assert.equal(utils.STATE.OPEN, connection.readyState);
