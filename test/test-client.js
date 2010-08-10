@@ -6,6 +6,7 @@ var factory = socky.createConnectionFactory(1121, 'localhost');
 var connection = factory.createConnection(80, 'google.com');
 
 connection.on('connect', function() {
+	assert.ok(connection.isProxyReady());
 	assert.equal(utils.STATE.OPEN, connection.readyState);
 	
 	// send a simple HTTP request
