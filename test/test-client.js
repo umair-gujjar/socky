@@ -4,6 +4,7 @@ var socky = require('../lib/socky'),
 
 var factory = socky.createConnectionFactory(1121, 'localhost');
 var connection = factory.createConnection(80, 'google.com');
+var reused = false;
 
 connection.on('connect', function() {
 	assert.ok(connection.isProxyReady());
@@ -20,4 +21,13 @@ connection.on('data', function(data) {
 
 connection.on('end', function() {
 	connection.end();
+});
+
+connection.on('close', function() {
+	assert.equal(utils.STATE.CLOSED, connection.readyState);
+	
+	reused = true;
+	if (!reused) {
+		connection.connect(80, 'google.com');
+	}
 });
